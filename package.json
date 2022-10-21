@@ -1,0 +1,30 @@
+{
+  "name": "@devs-studio/sunat",
+  "version": "1.0.0",
+  "description": "\"Validaciones y más para Sunat\"",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublish": "npx tsc",
+    "build": "npx tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://JeanPaper@bitbucket.org/JeanPaper/devsstudio-sunat.git"
+  },
+  "keywords": [
+    "validation",
+    "javascript",
+    "typescript",
+    "sunat",
+    "peru"
+  ],
+  "author": "Devs Studio",
+  "license": "ISC",
+  "dependencies": {
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  }
+}
