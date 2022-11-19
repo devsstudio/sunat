@@ -12,7 +12,7 @@ export const PURCHASE_8_3 = "8.3";
  * @param string file_code Código de libro
  * @return boolean
  */
-export function isSale(file_code) {
+export function isSale(file_code: string): boolean {
   return [SALE_14, SALE_14_1, SALE_14_2].includes(file_code);
 }
 
@@ -21,7 +21,7 @@ export function isSale(file_code) {
  * @param string file_code Código de libro
  * @return boolean
  */
-export function isPurchase(file_code) {
+export function isPurchase(file_code: string): boolean {
   return [PURCHASE_8, PURCHASE_8_1, PURCHASE_8_2, PURCHASE_8_3].includes(
     file_code
   );
@@ -32,7 +32,7 @@ export function isPurchase(file_code) {
  * @param string file_code Código de libro
  * @return boolean
  */
-export function isSaleOrPurchase(file_code) {
+export function isSaleOrPurchase(file_code: string): boolean {
   return [
     SALE_14,
     SALE_14_1,

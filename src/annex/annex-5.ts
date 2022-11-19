@@ -1,4 +1,4 @@
-const {
+import {
   SALE_14_1,
   SALE_14_2,
   PURCHASE_8_1,
@@ -7,9 +7,9 @@ const {
   isSale,
   isPurchase,
   isSaleOrPurchase,
-} = require("../file/file");
-const { TABLE_11_ITEMS } = require("../table/table-11");
-var validator = require("validator");
+} from "../file/file";
+import { TABLE_11_ITEMS } from "../table/table-11";
+import validator from "validator";
 
 export const TICKET_TYPES = {
   1: "Boleto Manual",
@@ -25,7 +25,7 @@ export const BVME_TICKET_TYPES = {
   5: "Anulado",
 };
 
-const _getRules = () => {
+const _getRules = (): { [key: string]: any } => {
   return {
     "00": {
       sale: {
@@ -562,7 +562,12 @@ const _getRules = () => {
   };
 };
 
-const _alphanumericStartWith = (value, startWith, min, max) => {
+const _alphanumericStartWith = (
+  value: string,
+  startWith: string,
+  min: number,
+  max: number
+) => {
   return (
     value.startsWith(startWith) &&
     validator.isAlphanumeric(value) &&
@@ -570,7 +575,7 @@ const _alphanumericStartWith = (value, startWith, min, max) => {
   );
 };
 
-export function validateDocumentCode(file_code, document_code) {
+export function validateDocumentCode(file_code: string, document_code: string) {
   const rules = _getRules();
   //Existe??
   if (rules[document_code]) {
@@ -585,7 +590,11 @@ export function validateDocumentCode(file_code, document_code) {
   return false;
 }
 
-export function validateDocument(file_code, document_code, state) {
+export function validateDocument(
+  file_code: string,
+  document_code: string,
+  state: string
+) {
   const rules = _getRules();
   //Existe??
   if (rules[document_code]) {
@@ -611,10 +620,10 @@ export function validateDocument(file_code, document_code, state) {
 }
 
 export function validateSerie(
-  file_code,
-  document_code,
-  document_serie,
-  electronic = false
+  file_code: string,
+  document_code: string,
+  document_serie: string,
+  electronic: boolean = false
 ) {
   const ticket_keys = Object.keys(TICKET_TYPES);
   const table11_keys = Object.keys(TABLE_11_ITEMS);
@@ -701,7 +710,7 @@ export function validateSerie(
           validator.isInt(document_serie, {
             gt: 0,
             allow_leading_zeroes: true,
-          }) && validator.isLength(document_serie, 4, 4)
+          }) && validator.isLength(document_serie, { min: 4, max: 4 })
         );
       } else {
         return false;
@@ -885,7 +894,7 @@ export function validateSerie(
           validator.isInt(document_serie, {
             gt: 0,
             allow_leading_zeroes: true,
-          }) && validator.isLength(document_serie, 4, 4)
+          }) && validator.isLength(document_serie, { min: 4, max: 4 })
         );
       } else {
         return false;
@@ -926,7 +935,7 @@ export function validateSerie(
           validator.isInt(document_serie, {
             gt: 0,
             allow_leading_zeroes: true,
-          }) && validator.isLength(document_serie, 4, 4)
+          }) && validator.isLength(document_serie, { min: 4, max: 4 })
         );
       } else {
         return false;
@@ -947,7 +956,7 @@ export function validateSerie(
           validator.isInt(document_serie, {
             gt: 0,
             allow_leading_zeroes: true,
-          }) && validator.isLength(document_serie, 4, 4)
+          }) && validator.isLength(document_serie, { min: 4, max: 4 })
         );
       } else {
         return false;
@@ -970,9 +979,9 @@ export function validateSerie(
 }
 
 export function validateCorrelative(
-  file_code,
-  document_code,
-  document_correlative,
+  file_code: string,
+  document_code: string,
+  document_correlative: string,
   electronic = false
 ) {
   switch (document_code) {
@@ -1340,7 +1349,7 @@ export function validateCorrelative(
   }
 }
 
-export function isElectronic(sunat_code, document_serie) {
+export function isElectronic(sunat_code: string, document_serie: string) {
   switch (sunat_code) {
     case "01":
       return (

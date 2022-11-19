@@ -57,8 +57,8 @@ export const TABLE_10_ITEMS = {
   99: "Otros -Consolidado de Boletas de Venta",
 };
 
-export function getFilteredItems(keys) {
-  return Object.fromEntries(
-    Object.entries(TABLE_10_ITEMS).filter(([key]) => keys.includes(key))
-  );
-}
+// export function getFilteredItems(keys) {
+//   return Object.fromEntries(
+//     Object.entries(TABLE_10_ITEMS).filter(([key]) => keys.includes(key))
+//   );
+// }
