@@ -8,12 +8,12 @@ export const DOC_A = "A";
 export const DOC_0 = "0";
 
 export const TABLE_2_ITEMS: { [key: string]: string } = {
-  DOC_1: "DNI",
-  DOC_4: "Carnet de extranjería",
-  DOC_6: "RUC",
-  DOC_7: "Pasaporte",
-  DOC_A: "Cedula diplomática de identidad",
-  DOC_0: "Otro",
+  [DOC_1]: "DNI",
+  [DOC_4]: "Carnet de extranjería",
+  [DOC_6]: "RUC",
+  [DOC_7]: "Pasaporte",
+  [DOC_A]: "Cedula diplomática de identidad",
+  [DOC_0]: "Otro",
 };
 
 export function validateCode(code: string) {
@@ -58,14 +58,7 @@ export function validateNumber(code: string, number: string) {
 }
 
 export function getItems() {
-  return {
-    DOC_1: "DNI",
-    DOC_4: "Carnet de extranjería",
-    DOC_6: "RUC",
-    DOC_7: "Pasaporte",
-    DOC_A: "Cedula diplomática de identidad",
-    DOC_0: "Otro",
-  };
+  return TABLE_2_ITEMS;
 }
 
 export function getName(value: string): string {
