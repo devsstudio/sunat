@@ -1,6 +1,6 @@
 {
   "name": "@devs-studio/sunat",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "\"Validaciones y más para Sunat\"",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,6 +26,6 @@
   },
   "devDependencies": {
     "@types/validator": "^13.7.10",
-    "typescript": "^4.8.4"
+    "typescript": "^4.9.3"
   }
 }
