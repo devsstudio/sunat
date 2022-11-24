@@ -1,53 +1,53 @@
 import validator from "validator";
 
-export const DOC_1 = "1";
-export const DOC_4 = "4";
-export const DOC_6 = "6";
-export const DOC_7 = "7";
-export const DOC_A = "A";
-export const DOC_0 = "0";
+export const ID_1 = "1";
+export const ID_4 = "4";
+export const ID_6 = "6";
+export const ID_7 = "7";
+export const ID_A = "A";
+export const ID_0 = "0";
 
 export const TABLE_2_ITEMS: { [key: string]: string } = {
-  [DOC_1]: "DNI",
-  [DOC_4]: "Carnet de extranjería",
-  [DOC_6]: "RUC",
-  [DOC_7]: "Pasaporte",
-  [DOC_A]: "Cedula diplomática de identidad",
-  [DOC_0]: "Otro",
+  [ID_1]: "DNI",
+  [ID_4]: "Carnet de extranjería",
+  [ID_6]: "RUC",
+  [ID_7]: "Pasaporte",
+  [ID_A]: "Cedula diplomática de identidad",
+  [ID_0]: "Otro",
 };
 
 export function validateCode(code: string) {
-  return [DOC_1, DOC_4, DOC_6, DOC_7, DOC_A, DOC_0].includes(code + "");
+  return [ID_1, ID_4, ID_6, ID_7, ID_A, ID_0].includes(code + "");
 }
 
 export function validateNumber(code: string, number: string) {
   switch (code) {
-    case DOC_1:
+    case ID_1:
       return (
         validator.isInt(number, { allow_leading_zeroes: true }) &&
         validator.isLength(number, { min: 8, max: 8 })
       );
-    case DOC_4:
+    case ID_4:
       return (
         validator.isAlphanumeric(number) &&
         validator.isLength(number, { min: 1, max: 12 })
       );
-    case DOC_6:
+    case ID_6:
       return (
         validator.isInt(number, { allow_leading_zeroes: true }) &&
         validator.isLength(number, { min: 11, max: 11 })
       );
-    case DOC_7:
+    case ID_7:
       return (
         validator.isAlphanumeric(number) &&
         validator.isLength(number, { min: 1, max: 12 })
       );
-    case DOC_A:
+    case ID_A:
       return (
         validator.isAlphanumeric(number) &&
         validator.isLength(number, { min: 1, max: 12 })
       );
-    case DOC_0:
+    case ID_0:
       return (
         validator.isAlphanumeric(number) &&
         validator.isLength(number, { min: 1, max: 15 })
@@ -55,10 +55,6 @@ export function validateNumber(code: string, number: string) {
     default:
       return false;
   }
-}
-
-export function getItems() {
-  return TABLE_2_ITEMS;
 }
 
 export function getName(value: string): string {
