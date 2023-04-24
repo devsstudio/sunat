@@ -1,116 +1,127 @@
 import {
-  SALE_14_1,
-  SALE_14_2,
-  PURCHASE_8_1,
-  PURCHASE_8_2,
-  PURCHASE_8_3,
+  PleFile,
   isSale,
   isPurchase,
   isSaleOrPurchase,
 } from "../file/file";
-import { TABLE_11_ITEMS } from "../table/table-11";
+import { Table11 } from "../table/table-11";
 import validator from "validator";
 
+export enum TicketType {
+  TICKET_1 = '1',
+  TICKET_2 = '2',
+  TICKET_3 = '3',
+  TICKET_4 = '4',
+  TICKET_5 = '5',
+}
+
 export const TICKET_TYPES = {
-  1: "Boleto Manual",
-  2: "Boleto Automático",
-  3: "Boleto Electrónico",
-  4: "Otros",
-  5: "Anulado",
+  [TicketType.TICKET_1]: "Boleto Manual",
+  [TicketType.TICKET_2]: "Boleto Automático",
+  [TicketType.TICKET_3]: "Boleto Electrónico",
+  [TicketType.TICKET_4]: "Otros",
+  [TicketType.TICKET_5]: "Anulado",
 };
 
+export enum BvmeTicketType {
+  BVME_1 = '1',
+  BVME_2 = '2',
+  BVME_5 = '5',
+}
+
+
 export const BVME_TICKET_TYPES = {
-  1: "Boleto Pre-Impreso",
-  2: "Boleto Electrónico",
-  5: "Anulado",
+  [BvmeTicketType.BVME_1]: "Boleto Pre-Impreso",
+  [BvmeTicketType.BVME_2]: "Boleto Electrónico",
+  [BvmeTicketType.BVME_5]: "Anulado",
 };
 
 const _getRules = (): { [key: string]: any } => {
   return {
     "00": {
       sale: {
-        on: [SALE_14_1, SALE_14_2],
+        on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_2, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_2, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     "01": {
       sale: {
-        on: [SALE_14_1, SALE_14_2],
+        on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     "02": {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 9],
       },
     },
     "03": {
       sale: {
-        on: [SALE_14_1, SALE_14_2],
+        on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 9],
       },
     },
     "04": {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
     },
     "05": {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     "06": {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     "07": {
       sale: {
-        on: [SALE_14_1, SALE_14_2],
+        on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
     },
     "08": {
       sale: {
-        on: [SALE_14_1, SALE_14_2],
+        on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
     },
@@ -121,97 +132,97 @@ const _getRules = (): { [key: string]: any } => {
     10: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 9],
       },
     },
     11: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     12: {
       sale: {
-        on: [SALE_14_1, SALE_14_2],
+        on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     13: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     14: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     15: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     16: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     17: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     18: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     19: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 9],
       },
     },
@@ -221,98 +232,98 @@ const _getRules = (): { [key: string]: any } => {
     },
     21: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 9],
       },
     },
     22: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 9],
       },
     },
     23: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     24: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     25: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
     },
     26: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     27: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     28: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     29: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     30: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
@@ -322,11 +333,11 @@ const _getRules = (): { [key: string]: any } => {
     },
     32: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
@@ -336,41 +347,41 @@ const _getRules = (): { [key: string]: any } => {
     },
     34: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
     },
     35: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
     },
     36: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
     },
     37: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
@@ -384,178 +395,178 @@ const _getRules = (): { [key: string]: any } => {
     },
     42: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     43: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     44: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 9],
       },
     },
     45: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 9],
       },
     },
     46: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     48: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
     },
     49: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 9],
       },
     },
     50: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     51: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     52: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     53: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     54: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     55: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     56: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     87: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     88: {
       sale: {
-        on: [SALE_14_1],
+        on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
       },
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     89: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_1],
+        on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
     },
     91: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_2],
+        on: [PleFile.PURCHASE_8_2],
         states: [0, 9],
       },
     },
     96: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_1, PURCHASE_8_3],
+        on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
     },
     97: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_2],
+        on: [PleFile.PURCHASE_8_2],
         states: [0, 9],
       },
     },
     98: {
       sale: false,
       purchase: {
-        on: [PURCHASE_8_2],
+        on: [PleFile.PURCHASE_8_2],
         states: [0, 9],
       },
     },
@@ -625,9 +636,9 @@ export function validateSerie(
   document_serie: string,
   electronic: boolean = false
 ) {
-  const ticket_keys = Object.keys(TICKET_TYPES);
-  const table11_keys = Object.keys(TABLE_11_ITEMS);
-  const bvme_ticket_keys = Object.keys(BVME_TICKET_TYPES);
+  const ticketTypes = Object.values<string>(TicketType);
+  const table11Values = Object.values<string>(Table11);
+  const bvmeTicketTypes = Object.values<string>(BvmeTicketType);
 
   switch (document_code) {
     case "00":
@@ -695,10 +706,10 @@ export function validateSerie(
       }
     case "05":
       if (isSale(file_code)) {
-        return validator.isIn(document_serie, ticket_keys);
+        return validator.isIn(document_serie, ticketTypes);
       } else if (isPurchase(file_code)) {
         return (
-          validator.isIn(document_serie, ticket_keys) &&
+          validator.isIn(document_serie, ticketTypes) &&
           !validator.isIn(document_serie, [5])
         );
       } else {
@@ -914,16 +925,16 @@ export function validateSerie(
     case "53":
     case "54":
       if (isPurchase(file_code)) {
-        return validator.isIn(document_serie, table11_keys);
+        return validator.isIn(document_serie, table11Values);
       } else {
         return false;
       }
     case "55":
       if (isSale(file_code)) {
-        return validator.isIn(document_serie, bvme_ticket_keys);
+        return validator.isIn(document_serie, bvmeTicketTypes);
       } else if (isPurchase(file_code)) {
         return (
-          validator.isIn(document_serie, bvme_ticket_keys) &&
+          validator.isIn(document_serie, bvmeTicketTypes) &&
           !validator.isIn(document_serie, [5])
         );
       } else {

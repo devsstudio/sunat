@@ -1,8 +1,10 @@
-export const CODE_8_1 = "080100";
-export const CODE_8_2 = "080200";
-export const CODE_8_3 = "080300";
-export const CODE_14_1 = "140100";
-export const CODE_14_2 = "140200";
+export enum PleCode {
+  CODE_8_1 = "080100",
+  CODE_8_2 = "080200",
+  CODE_8_3 = "080300",
+  CODE_14_1 = "140100",
+  CODE_14_2 = "140200",
+}
 
 export function getFilename(
   ruc: string,

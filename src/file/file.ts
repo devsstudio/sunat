@@ -1,11 +1,15 @@
-export const PURCHASE_8 = "8";
-export const SALE_14 = "14";
-//Especificos del PLE
-export const SALE_14_1 = "14.1";
-export const SALE_14_2 = "14.2";
-export const PURCHASE_8_1 = "8.1";
-export const PURCHASE_8_2 = "8.2";
-export const PURCHASE_8_3 = "8.3";
+export enum File {
+  PURCHASE_8 = "8",
+  SALE_14 = "14"
+}
+
+export enum PleFile {
+  SALE_14_1 = "14.1",
+  SALE_14_2 = "14.2",
+  PURCHASE_8_1 = "8.1",
+  PURCHASE_8_2 = "8.2",
+  PURCHASE_8_3 = "8.3"
+}
 
 /**
  * Determina si un código de libro es venta
@@ -13,7 +17,7 @@ export const PURCHASE_8_3 = "8.3";
  * @return boolean
  */
 export function isSale(file_code: string): boolean {
-  return [SALE_14, SALE_14_1, SALE_14_2].includes(file_code);
+  return [File.SALE_14.toString(), PleFile.SALE_14_1.toString(), PleFile.SALE_14_2.toString()].includes(file_code);
 }
 
 /**
@@ -22,7 +26,7 @@ export function isSale(file_code: string): boolean {
  * @return boolean
  */
 export function isPurchase(file_code: string): boolean {
-  return [PURCHASE_8, PURCHASE_8_1, PURCHASE_8_2, PURCHASE_8_3].includes(
+  return [File.PURCHASE_8.toString(), PleFile.PURCHASE_8_1.toString(), PleFile.PURCHASE_8_2.toString(), PleFile.PURCHASE_8_3.toString()].includes(
     file_code
   );
 }
@@ -33,13 +37,6 @@ export function isPurchase(file_code: string): boolean {
  * @return boolean
  */
 export function isSaleOrPurchase(file_code: string): boolean {
-  return [
-    SALE_14,
-    SALE_14_1,
-    SALE_14_2,
-    PURCHASE_8,
-    PURCHASE_8_1,
-    PURCHASE_8_2,
-    PURCHASE_8_3,
-  ].includes(file_code);
+
+  return Object.values<string>(File).includes(file_code) || Object.values<string>(PleFile).includes(file_code);
 }
