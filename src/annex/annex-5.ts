@@ -680,7 +680,7 @@ export function validateSerie(
         if (electronic) {
           return (
             validator.isIn(document_serie, ["EB01"]) ||
-            _alphanumericStartWith(document_serie, "B", 3, 3)
+            _alphanumericStartWith(document_serie, "B", 4, 4)
           );
         } else {
           return (
@@ -732,8 +732,8 @@ export function validateSerie(
         if (electronic) {
           return (
             validator.isIn(document_serie, ["E001", "EB01"]) ||
-            _alphanumericStartWith(document_serie, "F", 3, 3) ||
-            _alphanumericStartWith(document_serie, "B", 3, 3)
+            _alphanumericStartWith(document_serie, "F", 4, 4) ||
+            _alphanumericStartWith(document_serie, "B", 4, 4)
           );
         } else {
           return (
