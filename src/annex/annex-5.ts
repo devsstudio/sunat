@@ -4,6 +4,7 @@ import {
   isPurchase,
   isSaleOrPurchase,
 } from "../file/file";
+import { Table10 } from "../table/table-10";
 import { Table11 } from "../table/table-11";
 import validator from "validator";
 
@@ -36,9 +37,22 @@ export const BVME_TICKET_TYPES = {
   [BvmeTicketType.BVME_5]: "Anulado",
 };
 
-const _getRules = (): { [key: string]: any } => {
+export interface Annex5Rule {
+  sale?: Annex5RuleCondition,
+  purchase?: Annex5RuleCondition,
+  other: Annex5RuleCondition,
+}
+
+export interface Annex5RuleCondition {
+  on?: string[],
+  states: number[],
+}
+
+//Reglas basadas en "Estructura del PLE.xls"
+
+const _getRules = (): { [key: string]: Annex5Rule } => {
   return {
-    "00": {
+    [Table10.DOC_00]: {
       sale: {
         on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [0, 1, 2, 8, 9],
@@ -47,8 +61,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_2, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    "01": {
+    [Table10.DOC_01]: {
       sale: {
         on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [1, 2, 8, 9],
@@ -57,15 +74,21 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    "02": {
-      sale: false,
+    [Table10.DOC_02]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    "03": {
+    [Table10.DOC_03]: {
       sale: {
         on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [1, 2, 8, 9],
@@ -74,8 +97,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    "04": {
+    [Table10.DOC_04]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -84,8 +110,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    "05": {
+    [Table10.DOC_05]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -94,8 +123,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    "06": {
+    [Table10.DOC_06]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 8, 9],
@@ -104,8 +136,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    "07": {
+    [Table10.DOC_07]: {
       sale: {
         on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [1, 2, 8, 9],
@@ -114,8 +149,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    "08": {
+    [Table10.DOC_08]: {
       sale: {
         on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [1, 2, 8, 9],
@@ -124,19 +162,28 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    "09": {
-      sale: false,
-      purchase: false,
+    [Table10.DOC_09]: {
+      sale: null,
+      purchase: null,
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    10: {
-      sale: false,
+    [Table10.DOC_10]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    11: {
+    [Table10.DOC_11]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -145,8 +192,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    12: {
+    [Table10.DOC_12]: {
       sale: {
         on: [PleFile.SALE_14_1, PleFile.SALE_14_2],
         states: [1, 2, 8, 9],
@@ -155,8 +205,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    13: {
+    [Table10.DOC_13]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -165,8 +218,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    14: {
+    [Table10.DOC_14]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -175,8 +231,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    15: {
+    [Table10.DOC_15]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -185,8 +244,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    16: {
+    [Table10.DOC_16]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -195,8 +257,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    17: {
+    [Table10.DOC_17]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -205,8 +270,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    18: {
+    [Table10.DOC_18]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -215,8 +283,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    19: {
+    [Table10.DOC_19]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -225,12 +296,18 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    20: {
-      sale: false,
-      purchase: false,
+    [Table10.DOC_20]: {
+      sale: null,
+      purchase: null,
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    21: {
+    [Table10.DOC_21]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -239,15 +316,21 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    22: {
-      sale: false,
+    [Table10.DOC_22]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    23: {
+    [Table10.DOC_23]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -256,8 +339,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    24: {
+    [Table10.DOC_24]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -266,8 +352,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    25: {
+    [Table10.DOC_25]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -276,8 +365,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    26: {
+    [Table10.DOC_26]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -286,8 +378,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    27: {
+    [Table10.DOC_27]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -296,8 +391,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    28: {
+    [Table10.DOC_28]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -306,8 +404,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    29: {
+    [Table10.DOC_29]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -316,8 +417,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    30: {
+    [Table10.DOC_30]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -326,12 +430,18 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    31: {
-      sale: false,
-      purchase: false,
+    [Table10.DOC_31]: {
+      sale: null,
+      purchase: null,
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    32: {
+    [Table10.DOC_32]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -340,12 +450,18 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    33: {
-      sale: false,
-      purchase: false,
+    [Table10.DOC_33]: {
+      sale: null,
+      purchase: null,
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    34: {
+    [Table10.DOC_34]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -354,8 +470,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    35: {
+    [Table10.DOC_35]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -364,8 +483,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    36: {
+    [Table10.DOC_36]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -374,8 +496,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    37: {
+    [Table10.DOC_37]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -384,16 +509,25 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    40: {
-      sale: false,
-      purchase: false,
+    [Table10.DOC_40]: {
+      sale: null,
+      purchase: null,
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    41: {
-      sale: false,
-      purchase: false,
+    [Table10.DOC_41]: {
+      sale: null,
+      purchase: null,
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    42: {
+    [Table10.DOC_42]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -402,8 +536,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    43: {
+    [Table10.DOC_43]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -412,8 +549,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    44: {
+    [Table10.DOC_44]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -422,8 +562,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    45: {
+    [Table10.DOC_45]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -432,15 +575,21 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    46: {
-      sale: false,
+    [Table10.DOC_46]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    48: {
+    [Table10.DOC_48]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -449,8 +598,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    49: {
+    [Table10.DOC_49]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 8, 9],
@@ -459,43 +611,61 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    50: {
-      sale: false,
+    [Table10.DOC_50]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    51: {
-      sale: false,
+    [Table10.DOC_51]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    52: {
-      sale: false,
+    [Table10.DOC_52]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    53: {
-      sale: false,
+    [Table10.DOC_53]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    54: {
-      sale: false,
+    [Table10.DOC_54]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    55: {
+    [Table10.DOC_55]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -504,8 +674,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    56: {
+    [Table10.DOC_56]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [0, 1, 2, 8, 9],
@@ -514,8 +687,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    87: {
+    [Table10.DOC_87]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -524,8 +700,11 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    88: {
+    [Table10.DOC_88]: {
       sale: {
         on: [PleFile.SALE_14_1],
         states: [1, 2, 8, 9],
@@ -534,40 +713,58 @@ const _getRules = (): { [key: string]: any } => {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    89: {
-      sale: false,
+    [Table10.DOC_89]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_1],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    91: {
-      sale: false,
+    [Table10.DOC_91]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_2],
         states: [0, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    96: {
-      sale: false,
+    [Table10.DOC_96]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_1, PleFile.PURCHASE_8_3],
         states: [0, 1, 6, 7, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    97: {
-      sale: false,
+    [Table10.DOC_97]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_2],
         states: [0, 9],
       },
+      other: {
+        states: [1, 8, 9],
+      },
     },
-    98: {
-      sale: false,
+    [Table10.DOC_98]: {
+      sale: null,
       purchase: {
         on: [PleFile.PURCHASE_8_2],
         states: [0, 9],
+      },
+      other: {
+        states: [1, 8, 9],
       },
     },
   };
@@ -586,15 +783,17 @@ const _alphanumericStartWith = (
   );
 };
 
-export function validateDocumentCode(file_code: string, document_code: string) {
+export function validateDocumentCode(file_code: string, document_code: string): boolean {
   const rules = _getRules();
   //Existe??
   if (rules[document_code]) {
     //SI existe buscados si es compra o venta
     if (isSale(file_code)) {
-      return rules[document_code]["sale"] !== false;
+      return rules[document_code].sale !== null;
     } else if (isPurchase(file_code)) {
-      return rules[document_code]["purchase"] !== false;
+      return rules[document_code].purchase !== null;
+    } else {
+      return true;
     }
   }
 
@@ -604,26 +803,26 @@ export function validateDocumentCode(file_code: string, document_code: string) {
 export function validateDocument(
   file_code: string,
   document_code: string,
-  state: string
-) {
+  state: number
+): boolean {
   const rules = _getRules();
   //Existe??
   if (rules[document_code]) {
     //SI existe buscados si es compra o venta
     if (isSale(file_code)) {
       return (
-        rules[document_code]["sale"] !== false &&
-        rules[document_code]["sale"]["on"].includes(file_code) &&
-        (state ? rules[document_code]["sale"]["states"].includes(state) : true)
+        rules[document_code].sale &&
+        rules[document_code].sale.on.includes(file_code) &&
+        rules[document_code].sale.states.includes(state)
       );
     } else if (isPurchase(file_code)) {
       return (
-        rules[document_code]["purchase"] !== false &&
-        rules[document_code]["purchase"]["on"].includes(file_code) &&
-        (state
-          ? rules[document_code]["purchase"]["states"].includes(state)
-          : true)
+        rules[document_code].purchase &&
+        rules[document_code].purchase.on.includes(file_code) &&
+        rules[document_code].purchase.states.includes(state)
       );
+    } else {
+      return rules[document_code].other.states.includes(state)
     }
   }
 
@@ -641,295 +840,235 @@ export function validateSerie(
   const bvmeTicketTypes = Object.values<string>(BvmeTicketType);
 
   switch (document_code) {
-    case "00":
+    case Table10.DOC_00:
       return (
         validator.isAlphanumeric(document_serie) &&
         validator.isLength(document_serie, { min: 0, max: 20 })
       );
-    case "01":
-      if (isSaleOrPurchase(file_code)) {
-        if (electronic) {
-          return (
-            validator.isIn(document_serie, ["E001"]) ||
-            _alphanumericStartWith(document_serie, "F", 4, 4)
-          );
-        } else {
-          return (
-            validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
-            validator.isLength(document_serie, { min: 4, max: 4 })
-          );
-        }
+    case Table10.DOC_01:
+      if (electronic) {
+        return (
+          validator.isIn(document_serie, ["E001"]) ||
+          _alphanumericStartWith(document_serie, "F", 4, 4)
+        );
       } else {
-        return false;
+        return (
+          validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
+          validator.isLength(document_serie, { min: 4, max: 4 })
+        );
       }
-    case "02":
-      if (isPurchase(file_code)) {
-        if (electronic) {
-          return validator.isIn(document_serie, ["E001"]);
-        } else {
-          return (
-            validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
-            validator.isLength(document_serie, { min: 4, max: 4 })
-          );
-        }
-      } else {
-        return false;
-      }
-    case "03":
-      if (isSaleOrPurchase(file_code)) {
-        if (electronic) {
-          return (
-            validator.isIn(document_serie, ["EB01"]) ||
-            _alphanumericStartWith(document_serie, "B", 4, 4)
-          );
-        } else {
-          return (
-            validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
-            validator.isLength(document_serie, { min: 4, max: 4 })
-          );
-        }
-      } else {
-        return false;
-      }
-    case "04":
-      if (isSaleOrPurchase(file_code)) {
-        if (electronic) {
-          return validator.isIn(document_serie, ["E001"]);
-        } else {
-          return (
-            validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
-            validator.isLength(document_serie, { min: 4, max: 4 })
-          );
-        }
-      } else {
-        return false;
-      }
-    case "05":
+    case Table10.DOC_02:
       if (isSale(file_code)) {
-        return validator.isIn(document_serie, ticketTypes);
-      } else if (isPurchase(file_code)) {
-        return (
-          validator.isIn(document_serie, ticketTypes) &&
-          !validator.isIn(document_serie, [5])
-        );
-      } else {
         return false;
-      }
-    case "06":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_serie, {
-            gt: 0,
-            allow_leading_zeroes: true,
-          }) && validator.isLength(document_serie, { min: 4, max: 4 })
-        );
       } else {
-        return false;
-      }
-    case "07":
-    case "08":
-      if (isSaleOrPurchase(file_code)) {
         if (electronic) {
-          return (
-            validator.isIn(document_serie, ["E001", "EB01"]) ||
-            _alphanumericStartWith(document_serie, "F", 4, 4) ||
-            _alphanumericStartWith(document_serie, "B", 4, 4)
-          );
+          return validator.isIn(document_serie, ["E001"]);
         } else {
           return (
             validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
             validator.isLength(document_serie, { min: 4, max: 4 })
           );
         }
-      } else {
-        return false;
       }
-    case "09":
-      return !isSaleOrPurchase(file_code);
-    case "10":
-      if (isPurchase(file_code)) {
+    case Table10.DOC_03:
+      if (electronic) {
+        return (
+          validator.isIn(document_serie, ["EB01"]) ||
+          _alphanumericStartWith(document_serie, "B", 4, 4)
+        );
+      } else {
+        return (
+          validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
+          validator.isLength(document_serie, { min: 4, max: 4 })
+        );
+      }
+    case Table10.DOC_04:
+      if (electronic) {
+        return validator.isIn(document_serie, ["E001"]);
+      } else {
+        return (
+          validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
+          validator.isLength(document_serie, { min: 4, max: 4 })
+        );
+      }
+    case Table10.DOC_05:
+      return validator.isIn(document_serie, ticketTypes);
+    case Table10.DOC_06:
+      return (
+        validator.isInt(document_serie, {
+          gt: 0,
+          allow_leading_zeroes: true,
+        }) && validator.isLength(document_serie, { min: 4, max: 4 })
+      );
+    case Table10.DOC_07:
+    case Table10.DOC_08:
+      if (electronic) {
+        return (
+          validator.isIn(document_serie, ["E001", "EB01"]) ||
+          _alphanumericStartWith(document_serie, "F", 4, 4) ||
+          _alphanumericStartWith(document_serie, "B", 4, 4)
+        );
+      } else {
+        return (
+          validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
+          validator.isLength(document_serie, { min: 4, max: 4 })
+        );
+      }
+    case Table10.DOC_09:
+      if (isSaleOrPurchase(file_code)) {
+        return false;
+      } else {
+        return validator.isAlphanumeric(document_serie) &&
+          validator.isLength(document_serie, { min: 4, max: 4 })
+      }
+    case Table10.DOC_10:
+      if (isSale(file_code)) {
+        return false;
+      } else {
         return validator.isIn(document_serie, ["1683"]);
-      } else {
-        return false;
       }
-    case "11":
+    case Table10.DOC_11:
+      return (
+        validator.isAlphanumeric(document_serie) &&
+        validator.isLength(document_serie, { min: 0, max: 20 })
+      );
+    case Table10.DOC_12:
+      return (
+        validator.isAlphanumeric(document_serie) &&
+        validator.isLength(document_serie, { min: 1, max: 20 })
+      );
+    case Table10.DOC_13:
+    case Table10.DOC_14:
+    case Table10.DOC_15:
+    case Table10.DOC_16:
+    case Table10.DOC_17:
+    case Table10.DOC_18:
+    case Table10.DOC_19:
+      return (
+        validator.isAlphanumeric(document_serie) &&
+        validator.isLength(document_serie, { min: 0, max: 20 })
+      );
+    case Table10.DOC_20:
       if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_serie) &&
-          validator.isLength(document_serie, { min: 0, max: 20 })
-        );
-      } else {
         return false;
-      }
-    case "12":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_serie) &&
-          validator.isLength(document_serie, { min: 1, max: 20 })
-        );
       } else {
-        return false;
+        return validator.isAlphanumeric(document_serie) &&
+          validator.isLength(document_serie, { min: 4, max: 4 })
       }
-    case "13":
-    case "14":
-    case "15":
-    case "16":
-    case "17":
-    case "18":
-    case "19":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_serie) &&
-          validator.isLength(document_serie, { min: 0, max: 20 })
-        );
+    case Table10.DOC_21:
+      return (
+        validator.isAlphanumeric(document_serie) &&
+        validator.isLength(document_serie, { min: 0, max: 20 })
+      );
+    case Table10.DOC_22:
+      if (isSale(file_code)) {
+        return false;
       } else {
-        return false;
-      }
-    case "20":
-      return !isSaleOrPurchase(file_code);
-    case "21":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_serie) &&
-          validator.isLength(document_serie, { min: 0, max: 20 })
-        );
-      } else {
-        return false;
-      }
-    case "22":
-      if (isPurchase(file_code)) {
         return validator.isIn(document_serie, ["0820"]);
-      } else {
-        return false;
       }
-    case "23":
+    case Table10.DOC_23:
+      return (
+        validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
+        validator.isLength(document_serie, { min: 4, max: 4 })
+      );
+    case Table10.DOC_24:
+      return (
+        validator.isAlphanumeric(document_serie) &&
+        validator.isLength(document_serie, { min: 0, max: 20 })
+      );
+    case Table10.DOC_25:
+      return (
+        validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
+        validator.isLength(document_serie, { min: 4, max: 4 })
+      );
+    case Table10.DOC_26:
+    case Table10.DOC_27:
+    case Table10.DOC_28:
+    case Table10.DOC_29:
+    case Table10.DOC_30:
+      return (
+        validator.isAlphanumeric(document_serie) &&
+        validator.isLength(document_serie, { min: 0, max: 20 })
+      );
+    case Table10.DOC_31:
       if (isSaleOrPurchase(file_code)) {
+        return false;
+      } else {
+        return validator.isAlphanumeric(document_serie) &&
+          validator.isLength(document_serie, { min: 4, max: 4 })
+      }
+    case Table10.DOC_32:
+      return (
+        validator.isAlphanumeric(document_serie) &&
+        validator.isLength(document_serie, { min: 0, max: 20 })
+      );
+    case Table10.DOC_33:
+      if (isSaleOrPurchase(file_code)) {
+        return false;
+      } else {
+        return validator.isAlphanumeric(document_serie) &&
+          validator.isLength(document_serie, { min: 4, max: 4 })
+      }
+    case Table10.DOC_34:
+    case Table10.DOC_35:
+    case Table10.DOC_36:
+      return (
+        validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
+        validator.isLength(document_serie, { min: 4, max: 4 })
+      );
+    case Table10.DOC_37:
+      return (
+        validator.isAlphanumeric(document_serie) &&
+        validator.isLength(document_serie, { min: 0, max: 20 })
+      );
+    case Table10.DOC_40:
+    case Table10.DOC_41:
+      if (isSaleOrPurchase(file_code)) {
+        return false;
+      } else {
+        return validator.isAlphanumeric(document_serie) &&
+          validator.isLength(document_serie, { min: 4, max: 4 })
+      }
+    case Table10.DOC_42:
+    case Table10.DOC_43:
+    case Table10.DOC_44:
+    case Table10.DOC_45:
+      return (
+        validator.isAlphanumeric(document_serie) &&
+        validator.isLength(document_serie, { min: 0, max: 20 })
+      );
+    case Table10.DOC_46:
+      if (isSale(file_code)) {
+        return false;
+      } else {
         return (
           validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
           validator.isLength(document_serie, { min: 4, max: 4 })
         );
-      } else {
-        return false;
       }
-    case "24":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_serie) &&
-          validator.isLength(document_serie, { min: 0, max: 20 })
-        );
-      } else {
+    case Table10.DOC_48:
+      return (
+        validator.isInt(document_serie, {
+          gt: 0,
+          allow_leading_zeroes: true,
+        }) && validator.isLength(document_serie, { min: 4, max: 4 })
+      );
+    case Table10.DOC_49:
+      return (
+        validator.isAlphanumeric(document_serie) &&
+        validator.isLength(document_serie, { min: 0, max: 20 })
+      );
+    case Table10.DOC_50:
+    case Table10.DOC_51:
+    case Table10.DOC_52:
+    case Table10.DOC_53:
+    case Table10.DOC_54:
+      if (isSale(file_code)) {
         return false;
-      }
-    case "25":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
-          validator.isLength(document_serie, { min: 4, max: 4 })
-        );
       } else {
-        return false;
-      }
-    case "26":
-    case "27":
-    case "28":
-    case "29":
-    case "30":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_serie) &&
-          validator.isLength(document_serie, { min: 0, max: 20 })
-        );
-      } else {
-        return false;
-      }
-    case "31":
-      return !isSaleOrPurchase(file_code);
-    case "32":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_serie) &&
-          validator.isLength(document_serie, { min: 0, max: 20 })
-        );
-      } else {
-        return false;
-      }
-    case "33":
-      return !isSaleOrPurchase(file_code);
-    case "34":
-    case "35":
-    case "36":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
-          validator.isLength(document_serie, { min: 4, max: 4 })
-        );
-      } else {
-        return false;
-      }
-    case "37":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_serie) &&
-          validator.isLength(document_serie, { min: 0, max: 20 })
-        );
-      } else {
-        return false;
-      }
-    case "40":
-    case "41":
-      return !isSaleOrPurchase(file_code);
-    case "42":
-    case "43":
-    case "44":
-    case "45":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_serie) &&
-          validator.isLength(document_serie, { min: 0, max: 20 })
-        );
-      } else {
-        return false;
-      }
-    case "46":
-      if (isPurchase(file_code)) {
-        return (
-          validator.isInt(document_serie, { allow_leading_zeroes: true }) &&
-          validator.isLength(document_serie, { min: 4, max: 4 })
-        );
-      } else {
-        return false;
-      }
-    case "48":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_serie, {
-            gt: 0,
-            allow_leading_zeroes: true,
-          }) && validator.isLength(document_serie, { min: 4, max: 4 })
-        );
-      } else {
-        return false;
-      }
-    case "49":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_serie) &&
-          validator.isLength(document_serie, { min: 0, max: 20 })
-        );
-      } else {
-        return false;
-      }
-    case "50":
-    case "51":
-    case "52":
-    case "53":
-    case "54":
-      if (isPurchase(file_code)) {
         return validator.isIn(document_serie, table11Values);
-      } else {
-        return false;
       }
-    case "55":
+    case Table10.DOC_55:
       if (isSale(file_code)) {
         return validator.isIn(document_serie, bvmeTicketTypes);
       } else if (isPurchase(file_code)) {
@@ -940,49 +1079,41 @@ export function validateSerie(
       } else {
         return false;
       }
-    case "56":
-      if (isSaleOrPurchase(file_code)) {
+    case Table10.DOC_56:
+      return (
+        validator.isInt(document_serie, {
+          gt: 0,
+          allow_leading_zeroes: true,
+        }) && validator.isLength(document_serie, { min: 4, max: 4 })
+      );
+    case Table10.DOC_87:
+    case Table10.DOC_88:
+      return (
+        validator.isAlphanumeric(document_serie) &&
+        validator.isLength(document_serie, { min: 0, max: 20 })
+      );
+    case Table10.DOC_89:
+      if (isSale(file_code)) {
+        return false;
+      } else {
         return (
           validator.isInt(document_serie, {
             gt: 0,
             allow_leading_zeroes: true,
           }) && validator.isLength(document_serie, { min: 4, max: 4 })
         );
-      } else {
-        return false;
       }
-    case "87":
-    case "88":
-      if (isSaleOrPurchase(file_code)) {
+    case Table10.DOC_91:
+    case Table10.DOC_96:
+    case Table10.DOC_97:
+    case Table10.DOC_98:
+      if (isSale(file_code)) {
+        return false;
+      } else {
         return (
           validator.isAlphanumeric(document_serie) &&
           validator.isLength(document_serie, { min: 0, max: 20 })
         );
-      } else {
-        return false;
-      }
-    case "89":
-      if (isPurchase(file_code)) {
-        return (
-          validator.isInt(document_serie, {
-            gt: 0,
-            allow_leading_zeroes: true,
-          }) && validator.isLength(document_serie, { min: 4, max: 4 })
-        );
-      } else {
-        return false;
-      }
-    case "91":
-    case "96":
-    case "97":
-    case "98":
-      if (isPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_serie) &&
-          validator.isLength(document_serie, { min: 0, max: 20 })
-        );
-      } else {
-        return false;
       }
     default:
       return false;
@@ -996,35 +1127,38 @@ export function validateCorrelative(
   electronic = false
 ) {
   switch (document_code) {
-    case "00":
+    case Table10.DOC_00:
       return (
         validator.isAlphanumeric(document_correlative) &&
         validator.isLength(document_correlative, { min: 1, max: 20 })
       );
-    case "01":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, {
-            gt: 0,
-            allow_leading_zeroes: true,
-          }) && validator.isLength(document_correlative, { min: 1, max: 8 })
-        );
-      } else {
+    case Table10.DOC_01:
+      return (
+        validator.isInt(document_correlative, {
+          gt: 0,
+          allow_leading_zeroes: true,
+        }) && validator.isLength(document_correlative, { min: 1, max: 8 })
+      );
+    case Table10.DOC_02:
+      if (isSale(file_code)) {
         return false;
-      }
-    case "02":
-      if (isPurchase(file_code)) {
+      } else {
         return (
           validator.isInt(document_correlative, {
             gt: 0,
             allow_leading_zeroes: true,
           }) && validator.isLength(document_correlative, { min: 1, max: 7 })
         );
-      } else {
-        return false;
       }
-    case "03":
-      if (isSaleOrPurchase(file_code)) {
+    case Table10.DOC_03:
+      return (
+        validator.isInt(document_correlative, {
+          gt: 0,
+          allow_leading_zeroes: true,
+        }) && validator.isLength(document_correlative, { min: 1, max: 8 })
+      );
+    case Table10.DOC_04:
+      if (electronic) {
         return (
           validator.isInt(document_correlative, {
             gt: 0,
@@ -1032,328 +1166,229 @@ export function validateCorrelative(
           }) && validator.isLength(document_correlative, { min: 1, max: 8 })
         );
       } else {
-        return false;
-      }
-    case "04":
-      if (isSaleOrPurchase(file_code)) {
-        if (electronic) {
-          return (
-            validator.isInt(document_correlative, {
-              gt: 0,
-              allow_leading_zeroes: true,
-            }) && validator.isLength(document_correlative, { min: 1, max: 8 })
-          );
-        } else {
-          return (
-            validator.isInt(document_correlative, {
-              gt: 0,
-              allow_leading_zeroes: true,
-            }) && validator.isLength(document_correlative, { min: 1, max: 7 })
-          );
-        }
-      } else {
-        return false;
-      }
-    case "05":
-      if (isSaleOrPurchase(file_code)) {
         return (
           validator.isInt(document_correlative, {
             gt: 0,
             allow_leading_zeroes: true,
-          }) && validator.isLength(document_correlative, { min: 1, max: 11 })
+          }) && validator.isLength(document_correlative, { min: 1, max: 7 })
         );
-      } else {
-        return false;
       }
-    case "06":
-    case "07":
-    case "08":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, {
-            gt: 0,
-            allow_leading_zeroes: true,
-          }) && validator.isLength(document_correlative, { min: 1, max: 8 })
-        );
-      } else {
+    case Table10.DOC_05:
+      return (
+        validator.isInt(document_correlative, {
+          gt: 0,
+          allow_leading_zeroes: true,
+        }) && validator.isLength(document_correlative, { min: 1, max: 11 })
+      );
+    case Table10.DOC_06:
+    case Table10.DOC_07:
+    case Table10.DOC_08:
+      return (
+        validator.isInt(document_correlative, {
+          gt: 0,
+          allow_leading_zeroes: true,
+        }) && validator.isLength(document_correlative, { min: 1, max: 8 })
+      );
+    case Table10.DOC_09:
+      return validator.isAlphanumeric(document_correlative) && validator.isLength(document_correlative, { min: 1, max: 8 })
+    case Table10.DOC_10:
+      if (isSale(file_code)) {
         return false;
-      }
-    case "09":
-      return !isSaleOrPurchase(file_code);
-    case "10":
-      if (isPurchase(file_code)) {
+      } else {
         return (
           validator.isInt(document_correlative, {
             allow_leading_zeroes: true,
           }) && validator.isLength(document_correlative, { min: 1, max: 20 })
         );
-      } else {
-        return false;
       }
-    case "11":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, {
-            gt: 0,
-            allow_leading_zeroes: true,
-          }) && validator.isLength(document_correlative, { min: 1, max: 15 })
-        );
-      } else {
+    case Table10.DOC_11:
+      return (
+        validator.isInt(document_correlative, {
+          gt: 0,
+          allow_leading_zeroes: true,
+        }) && validator.isLength(document_correlative, { min: 1, max: 15 })
+      );
+    case Table10.DOC_12:
+      return (
+        validator.isInt(document_correlative, {
+          gt: 0,
+          allow_leading_zeroes: true,
+        }) && validator.isLength(document_correlative, { min: 1, max: 20 })
+      );
+    case Table10.DOC_13:
+    case Table10.DOC_14:
+    case Table10.DOC_15:
+      return (
+        validator.isAlphanumeric(document_correlative) &&
+        validator.isLength(document_correlative, { min: 1, max: 20 }) &&
+        !/^0+$/.test(document_correlative)
+      );
+    case Table10.DOC_16:
+    case Table10.DOC_17:
+    case Table10.DOC_18:
+    case Table10.DOC_19:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 20 })
+      );
+    case Table10.DOC_20:
+      return validator.isAlphanumeric(document_correlative) && validator.isLength(document_correlative, { min: 1, max: 8 })
+    case Table10.DOC_21:
+      return (
+        validator.isAlphanumeric(document_correlative) &&
+        validator.isLength(document_correlative, { min: 1, max: 20 }) &&
+        !/^0+$/.test(document_correlative)
+      );
+    case Table10.DOC_22:
+      if (isSale(file_code)) {
         return false;
-      }
-    case "12":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, {
-            gt: 0,
-            allow_leading_zeroes: true,
-          }) && validator.isLength(document_correlative, { min: 1, max: 20 })
-        );
       } else {
-        return false;
-      }
-    case "13":
-    case "14":
-    case "15":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_correlative) &&
-          validator.isLength(document_correlative, { min: 1, max: 20 }) &&
-          !/^0+$/.test(document_correlative)
-        );
-      } else {
-        return false;
-      }
-    case "16":
-    case "17":
-    case "18":
-    case "19":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 20 })
-        );
-      } else {
-        return false;
-      }
-    case "20":
-      return !isSaleOrPurchase(file_code);
-    case "21":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_correlative) &&
-          validator.isLength(document_correlative, { min: 1, max: 20 }) &&
-          !/^0+$/.test(document_correlative)
-        );
-      } else {
-        return false;
-      }
-    case "22":
-      if (isPurchase(file_code)) {
         return (
           validator.isInt(document_correlative, {
             allow_leading_zeroes: true,
           }) && validator.isLength(document_correlative, { min: 1, max: 20 })
         );
-      } else {
-        return false;
       }
-    case "23":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 7 })
-        );
-      } else {
+    case Table10.DOC_23:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 7 })
+      );
+    case Table10.DOC_24:
+      return (
+        validator.isAlphanumeric(document_correlative) &&
+        validator.isLength(document_correlative, { min: 1, max: 20 }) &&
+        !/^0+$/.test(document_correlative)
+      );
+    case Table10.DOC_25:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 7 })
+      );
+    case Table10.DOC_26:
+      return (
+        validator.isAlphanumeric(document_correlative) &&
+        validator.isLength(document_correlative, { min: 1, max: 20 }) &&
+        !/^0+$/.test(document_correlative)
+      );
+    case Table10.DOC_27:
+    case Table10.DOC_28:
+    case Table10.DOC_29:
+    case Table10.DOC_30:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 20 })
+      );
+    case Table10.DOC_31:
+      return validator.isAlphanumeric(document_correlative) && validator.isLength(document_correlative, { min: 1, max: 8 })
+    case Table10.DOC_32:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 20 })
+      );
+    case Table10.DOC_33:
+      return validator.isAlphanumeric(document_correlative) && validator.isLength(document_correlative, { min: 1, max: 8 })
+    case Table10.DOC_34:
+    case Table10.DOC_35:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 7 })
+      );
+    case Table10.DOC_36:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 8 })
+      );
+    case Table10.DOC_37:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 20 })
+      );
+    case Table10.DOC_40:
+    case Table10.DOC_41:
+      return validator.isAlphanumeric(document_correlative) && validator.isLength(document_correlative, { min: 1, max: 8 })
+    case Table10.DOC_42:
+    case Table10.DOC_43:
+    case Table10.DOC_44:
+    case Table10.DOC_45:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 20 })
+      );
+    case Table10.DOC_46:
+      if (isSale(file_code)) {
         return false;
-      }
-    case "24":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_correlative) &&
-          validator.isLength(document_correlative, { min: 1, max: 20 }) &&
-          !/^0+$/.test(document_correlative)
-        );
       } else {
-        return false;
-      }
-    case "25":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 7 })
-        );
-      } else {
-        return false;
-      }
-    case "26":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isAlphanumeric(document_correlative) &&
-          validator.isLength(document_correlative, { min: 1, max: 20 }) &&
-          !/^0+$/.test(document_correlative)
-        );
-      } else {
-        return false;
-      }
-    case "27":
-    case "28":
-    case "29":
-    case "30":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 20 })
-        );
-      } else {
-        return false;
-      }
-    case "31":
-      return !isSaleOrPurchase(file_code);
-    case "32":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 20 })
-        );
-      } else {
-        return false;
-      }
-    case "33":
-      return !isSaleOrPurchase(file_code);
-    case "34":
-    case "35":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 7 })
-        );
-      } else {
-        return false;
-      }
-    case "36":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 8 })
-        );
-      } else {
-        return false;
-      }
-    case "37":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 20 })
-        );
-      } else {
-        return false;
-      }
-    case "40":
-    case "41":
-      return !isSaleOrPurchase(file_code);
-    case "42":
-    case "43":
-    case "44":
-    case "45":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 20 })
-        );
-      } else {
-        return false;
-      }
-    case "46":
-      if (isPurchase(file_code)) {
         return (
           validator.isInt(document_correlative, {
             allow_leading_zeroes: true,
           }) && validator.isLength(document_correlative, { min: 1, max: 20 })
         );
-      } else {
-        return false;
       }
-    case "48":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 7 })
-        );
-      } else {
+    case Table10.DOC_48:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 7 })
+      );
+    case Table10.DOC_49:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 20 })
+      );
+    case Table10.DOC_50:
+    case Table10.DOC_51:
+    case Table10.DOC_52:
+    case Table10.DOC_53:
+      if (isSale(file_code)) {
         return false;
-      }
-    case "49":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 20 })
-        );
       } else {
-        return false;
-      }
-    case "50":
-    case "51":
-    case "52":
-    case "53":
-      if (isPurchase(file_code)) {
         return (
           validator.isInt(document_correlative, { gt: 0 }) &&
           validator.isLength(document_correlative, { min: 1, max: 6 })
         );
-      } else {
-        return false;
       }
-    case "54":
-      if (isPurchase(file_code)) {
+    case Table10.DOC_54:
+      if (isSale(file_code)) {
+        return false;
+      } else {
         return (
           validator.isInt(document_correlative, { gt: 0 }) &&
           validator.isLength(document_correlative, { min: 1, max: 20 })
         );
-      } else {
-        return false;
       }
-    case "55":
-    case "56":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 11 })
-        );
-      } else {
+    case Table10.DOC_55:
+    case Table10.DOC_56:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 11 })
+      );
+    case Table10.DOC_87:
+    case Table10.DOC_88:
+      return (
+        validator.isInt(document_correlative, { gt: 0 }) &&
+        validator.isLength(document_correlative, { min: 1, max: 20 })
+      );
+    case Table10.DOC_89:
+      if (isSale(file_code)) {
         return false;
-      }
-    case "87":
-    case "88":
-      if (isSaleOrPurchase(file_code)) {
-        return (
-          validator.isInt(document_correlative, { gt: 0 }) &&
-          validator.isLength(document_correlative, { min: 1, max: 20 })
-        );
       } else {
-        return false;
-      }
-    case "89":
-      if (isPurchase(file_code)) {
         return (
           validator.isInt(document_correlative, { gt: 0 }) &&
           validator.isLength(document_correlative, { min: 1, max: 7 })
         );
-      } else {
-        return false;
       }
-    case "91":
-    case "96":
-    case "97":
-    case "98":
-      if (isPurchase(file_code)) {
+    case Table10.DOC_91:
+    case Table10.DOC_96:
+    case Table10.DOC_97:
+    case Table10.DOC_98:
+      if (isSale(file_code)) {
+        return false;
+      } else {
         return (
           validator.isAlphanumeric(document_correlative) &&
           validator.isLength(document_correlative, { min: 1, max: 20 }) &&
           !/^0+$/.test(document_correlative)
         );
-      } else {
-        return false;
       }
     default:
       return false;
@@ -1362,22 +1397,22 @@ export function validateCorrelative(
 
 export function isElectronic(sunat_code: string, document_serie: string) {
   switch (sunat_code) {
-    case "01":
+    case Table10.DOC_01:
       return (
         validator.isIn(document_serie, ["E001"]) ||
         _alphanumericStartWith(document_serie, "F", 4, 4)
       );
-    case "02":
+    case Table10.DOC_02:
       return validator.isIn(document_serie, ["E001"]);
-    case "03":
+    case Table10.DOC_03:
       return (
         validator.isIn(document_serie, ["EB01"]) ||
         _alphanumericStartWith(document_serie, "B", 4, 4)
       );
-    case "04":
+    case Table10.DOC_04:
       return validator.isIn(document_serie, ["E001"]);
-    case "07":
-    case "08":
+    case Table10.DOC_07:
+    case Table10.DOC_08:
       return (
         validator.isIn(document_serie, ["E001", "EB01"]) ||
         _alphanumericStartWith(document_serie, "F", 4, 4) ||
