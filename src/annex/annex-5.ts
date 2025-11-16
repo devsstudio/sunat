@@ -38,8 +38,8 @@ export const BVME_TICKET_TYPES = {
 };
 
 export interface Annex5Rule {
-  sale?: Annex5RuleCondition,
-  purchase?: Annex5RuleCondition,
+  sale: Annex5RuleCondition | null,
+  purchase: Annex5RuleCondition | null,
   other: Annex5RuleCondition,
 }
 
@@ -811,15 +811,15 @@ export function validateDocument(
     //SI existe buscados si es compra o venta
     if (isSale(file_code)) {
       return (
-        rules[document_code].sale &&
-        rules[document_code].sale.on.includes(file_code) &&
-        rules[document_code].sale.states.includes(state)
+        rules[document_code].sale != null &&
+        rules[document_code].sale!.states.includes(state) &&
+        (rules[document_code].sale!.on?.includes(file_code) || false)
       );
     } else if (isPurchase(file_code)) {
       return (
-        rules[document_code].purchase &&
-        rules[document_code].purchase.on.includes(file_code) &&
-        rules[document_code].purchase.states.includes(state)
+        rules[document_code].purchase != null &&
+        rules[document_code].purchase!.states.includes(state) &&
+        (rules[document_code].purchase!.on?.includes(file_code) || false)
       );
     } else {
       return rules[document_code].other.states.includes(state)

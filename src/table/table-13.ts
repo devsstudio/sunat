@@ -8519,9 +8519,9 @@ export function validateUbigeo(ubigeo: string) {
 
 export function getUbigeo(ubigeo: string): Ubigeo | null {
 
-    var dept_name: string = null;
-    var prov_name: string = null;
-    var dist_name: string = null;
+    var dept_name: string = "";
+    var prov_name: string = "";
+    var dist_name: string = "";
 
     if (ubigeo.length === 6) {
         const dept_code: string = ubigeo.substring(0, 2);
