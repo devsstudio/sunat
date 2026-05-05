@@ -1,6 +1,6 @@
 {
   "name": "@devs-studio/sunat",
-  "version": "1.0.18",
+  "version": "1.0.22",
   "description": "\"Validaciones y más para Sunat\"",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
